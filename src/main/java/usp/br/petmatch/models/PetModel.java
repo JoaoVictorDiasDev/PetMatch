@@ -103,6 +103,9 @@ public class PetModel implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime posted;
 
+    @Column(name = "url")
+    private String url;
+
     @Transient
     private double distanceToCurrentReference;
 
@@ -354,6 +357,14 @@ public class PetModel implements Serializable {
 
     public void setPosted(LocalDateTime posted) {
         this.posted = posted;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public double getDistanceToCurrentReference() {

@@ -2,6 +2,7 @@ package usp.br.petmatch.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import usp.br.petmatch.models.PetModel;
@@ -32,6 +33,7 @@ public class PetController {
         return ResponseEntity.status(HttpStatus.OK).body(binaryArrays);
     }
 
+    @CrossOrigin
     @GetMapping ("/findPets")
     public ResponseEntity<List<PetModel>> findPets(){
         var pets = petService.findPets();
