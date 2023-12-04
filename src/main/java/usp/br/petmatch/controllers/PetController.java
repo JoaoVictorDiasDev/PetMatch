@@ -21,6 +21,7 @@ public class PetController {
        this.petService = petService;
     }
 
+    @CrossOrigin
     @GetMapping ("/pets")
     public ResponseEntity<List<PetModel>> getAllPets(){
        return ResponseEntity.status(HttpStatus.OK).body(petRepository.findAll());
@@ -33,10 +34,10 @@ public class PetController {
         return ResponseEntity.status(HttpStatus.OK).body(binaryArrays);
     }
 
-    @CrossOrigin
-    @GetMapping ("/findPets")
-    public ResponseEntity<List<PetModel>> findPets(){
-        var pets = petService.findPets();
-        return ResponseEntity.ok(pets);
-    }
+//    @CrossOrigin
+//    @GetMapping ("/findPets")
+//    public ResponseEntity<List<PetModel>> findPets(){
+//        //var pets = petService.findPets();
+//        //return ResponseEntity.ok(pets);
+//    }
 }

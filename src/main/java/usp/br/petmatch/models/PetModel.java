@@ -374,4 +374,30 @@ public class PetModel implements Serializable {
     public void setDistanceToCurrentReference(double distanceToCurrentReference) {
         this.distanceToCurrentReference = distanceToCurrentReference;
     }
+
+    public PetModel(){}
+
+    public PetModel(boolean seniorAge, boolean adultAge, boolean youngAge, boolean babeAge, boolean extraLargeSize, boolean largeSize, boolean mediumSize, boolean smallSize, boolean curlyCoat, boolean longCoat, boolean mediumCoat, boolean shortCoat, boolean wireCoat, boolean sex, boolean fixed, boolean houseTrained, boolean specialNeeds, boolean vaccinated, boolean goodWithKids, boolean goodWithDogs, boolean goodWithCats) {
+        this.seniorAge = seniorAge;
+        this.adultAge = adultAge;
+        this.youngAge = youngAge;
+        this.babeAge = babeAge;
+        this.extraLargeSize = extraLargeSize;
+        this.largeSize = largeSize;
+        this.mediumSize = mediumSize;
+        this.smallSize = smallSize;
+        this.curlyCoat = curlyCoat;
+        this.longCoat = longCoat;
+        this.mediumCoat = mediumCoat;
+        this.shortCoat = shortCoat;
+        this.wireCoat = wireCoat;
+        this.sex = sex;
+        this.fixed = fixed;
+        this.houseTrained = houseTrained;
+        this.specialNeeds = specialNeeds;
+        this.vaccinated = vaccinated;
+        this.goodWithKids = goodWithKids;
+        this.goodWithDogs = goodWithDogs;
+        this.goodWithCats = goodWithCats;
+    }
 }

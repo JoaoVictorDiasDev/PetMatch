@@ -15,12 +15,12 @@ public class PetService {
         this.petRepository = petRepository;
     }
 
-    public List<PetModel> findPets(){
+    public List<PetModel> findPets(PetModel referencePet){
         var allPets = getAllPets();
-        var referencePetBinaryArray = allPets.get(0).toBinaryArray();
+        var referencePetBinaryArray = referencePet.toBinaryArray();
         calculateAllJaccardDistances(referencePetBinaryArray, allPets);
         allPets.sort(Comparator.comparing(PetModel::getDistanceToCurrentReference));
-        return allPets;
+        return allPets.subList(0, 10);
     }
 
     public void calculateAllJaccardDistances(int[] referencePetBinaryArray, List<PetModel> pets){

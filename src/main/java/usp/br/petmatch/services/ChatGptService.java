@@ -5,7 +5,9 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import usp.br.petmatch.models.ChatGptModel;
+import usp.br.petmatch.models.ChatGptModelResponse;
 import usp.br.petmatch.models.ChatGptRequest;
+import usp.br.petmatch.models.PetModel;
 import usp.br.petmatch.repositories.ChatGptRepository;
 
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 
 @Service
 public class ChatGptService {
@@ -29,10 +32,12 @@ public class ChatGptService {
     public String CHATGPT_API_TEMPERATURE;
 
     private final ChatGptRepository chatGptRepository;
+    private final PetService petService;
     ObjectMapper om;
 
-    public ChatGptService(ChatGptRepository chatGptRepository) {
+    public ChatGptService(ChatGptRepository chatGptRepository, PetService petService) {
         this.chatGptRepository = chatGptRepository;
+        this.petService = petService;
         this.om = new ObjectMapper();
     }
 
@@ -66,6 +71,39 @@ public class ChatGptService {
             chatGptRepository.save(chatGpt);
 
             return chatGpt;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<PetModel> findPets(String userInput){
+        var url = CHATGPT_API_URL;
+        var apiKey = CHATGPT_API_KEY;
+        var model = CHATGPT_API_MODEL;
+        var maxTokens = Integer.parseInt(CHATGPT_API_MAX_TOKENS);
+        var temperature = Float.parseFloat(CHATGPT_API_TEMPERATURE);
+
+        var requestBody = ChatGptRequest.GetChatGptRequestBody(model, userInput, maxTokens, temperature);
+
+        try {
+            var request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + apiKey)
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            var client = HttpClient.newHttpClient();
+            var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            JSONObject result = new JSONObject(response.body()).getJSONArray("choices").getJSONObject(0).getJSONObject("message");
+            var content = new JSONObject(result.get("content").toString());
+
+            var responseModel = new ChatGptModelResponse();
+            responseModel = om.readValue(content.toString(), ChatGptModelResponse.class);
+            var idealPet = responseModel.getPetModel();
+
+            return petService.findPets(idealPet);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
